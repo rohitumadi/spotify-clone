@@ -19,6 +19,7 @@ interface HeaderProps {
 
 export default function Header({ children, className }: HeaderProps) {
   const router = useRouter();
+
   const authModal = useAuthModal();
   const supabaseClient = useSupabaseClient();
   const { user } = useUser();

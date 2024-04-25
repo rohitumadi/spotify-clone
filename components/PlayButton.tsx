@@ -17,7 +17,6 @@ export default function PlayButton({}: Props) {
     group-hover:translate-y-0
     "
       onClick={() => {}}
-      disabled
     >
       <FaPlay className="text-black " />
     </button>
