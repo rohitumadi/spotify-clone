@@ -9,3 +9,6 @@ body,
   background-color: black;
   color-scheme: dark;
 }
+.rhap_time {
+  color: white !important;
+}

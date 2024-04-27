@@ -1,59 +1,44 @@
 "use client";
-import { Song } from "@/types";
-import MediaItem from "./MediaItem";
-import LikeButton from "./LikeButton";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
-import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
-import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
-import Slider from "./Slider";
 import usePlayer from "@/hooks/usePlayer";
+import { Song } from "@/types";
 import { useEffect, useState } from "react";
-// @ts-ignore
-import useSound from "use-sound";
-import { format } from "path";
+import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
+import { BsPauseFill, BsPlayFill } from "react-icons/bs";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+import LikeButton from "./LikeButton";
+import MediaItem from "./MediaItem";
+import Slider from "./Slider";
+
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
 
 interface PlayerContentProps {
   song: Song;
   songUrl: string;
 }
 export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
-  const player = usePlayer();
-  const [volume, setVolume] = useState(1);
-  const [play, { pause, sound }] = useSound(songUrl, {
-    volume: volume,
-    onplay: () => setIsPlaying(true),
-    onpause: () => setIsPlaying(false),
-    onend: () => {
-      setIsPlaying(false);
-      onPlayNext();
-    },
-    format: ["mp3"],
-  });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    sound?.play();
-    return () => {
-      sound?.unload();
+    // Function to check if the screen is mobile or not
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
     };
-  }, [sound]);
-  const handlePlay = () => {
-    if (!isPlaying) {
-      play();
-    } else {
-      pause();
-    }
-  };
 
-  const toggleMute = () => {
-    if (volume === 0) {
-      setVolume(1);
-    } else {
-      setVolume(0);
-    }
-  };
-  const [isPlaying, setIsPlaying] = useState(false);
-  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+    // Initial check when component mounts
+    handleResize();
+
+    // Event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener when component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const player = usePlayer();
+
   const onPlayNext = () => {
     if (player.ids.length === 0) {
       return;
@@ -77,54 +62,60 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
     player.setId(previousSong);
   };
   return (
-    <div className="h-full grid grid-cols-2 md:grid-cols-3">
-      <div className="flex w-full justify-start">
-        <div className="flex items-center gap-x-4">
-          <MediaItem song={song} />
-          <LikeButton songId={song.id} />
-        </div>
+    <div className="h-full grid grid-cols-2  md:grid-cols-3">
+      <div className="flex  items-center justify-start ">
+        <MediaItem song={song} />
+        <LikeButton songId={song.id} />
       </div>
 
-      <div
-        className="flex md:hidden justify-end col-auto w-full
-      items-center"
-      >
-        <div
-          onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center bg-white p-1 rounded-full cursor-pointer"
-        >
-          <Icon size={30} className="text-black" />
-        </div>
-      </div>
-      <div className="hidden h-full md:flex justify-center items-center w-full max-w-[722px] gap-x-6">
-        <AiFillStepBackward
-          size={30}
-          onClick={onPlayPrevious}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-        />
-        <div
-          onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center bg-white p-1 rounded-full cursor-pointer"
-        >
-          <Icon size={30} className="text-black" />
-        </div>
-        <AiFillStepForward
-          size={30}
-          onClick={onPlayNext}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-        />
-      </div>
+      {isMobile ? (
+        <div className="sm:hidden  h-full  justify-center items-center w-full max-w-[722px] gap-x-6">
+          <AudioPlayer
+            customAdditionalControls={[]}
+            style={{
+              backgroundColor: "transparent",
 
-      <div className="hidden md:flex w-full justify-end pr-2">
-        <div className="flex items-center gap-x-2 w-[120px]">
-          <VolumeIcon
-            onClick={toggleMute}
-            className="cursor-pointer"
-            size={34}
+              padding: "0px",
+              boxShadow: "none",
+              marginBottom: "10px",
+            }}
+            customIcons={{
+              play: <BsPlayFill size={30} className="text-white" />,
+              pause: <BsPauseFill size={30} className="text-white" />,
+            }}
+            showSkipControls={true}
+            autoPlay
+            customVolumeControls={[]}
+            showJumpControls={false}
+            onClickNext={onPlayNext}
+            onClickPrevious={onPlayPrevious}
+            src={songUrl}
           />
-          <Slider value={volume} onChange={(value) => setVolume(value)} />
         </div>
-      </div>
+      ) : (
+        <div className="hidden h-full sm:flex justify-center items-center w-full max-w-[722px] gap-x-6">
+          <AudioPlayer
+            customAdditionalControls={[]}
+            style={{
+              backgroundColor: "transparent",
+
+              padding: "0px",
+              boxShadow: "none",
+              marginBottom: "10px",
+            }}
+            customIcons={{
+              play: <BsPlayFill size={30} className="text-white" />,
+              pause: <BsPauseFill size={30} className="text-white" />,
+            }}
+            showSkipControls={true}
+            autoPlay
+            showJumpControls={false}
+            onClickNext={onPlayNext}
+            onClickPrevious={onPlayPrevious}
+            src={songUrl}
+          />
+        </div>
+      )}
     </div>
   );
 }
