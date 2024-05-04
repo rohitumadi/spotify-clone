@@ -22,7 +22,7 @@ export default function Library({ songs }: LibraryProps) {
     if (!user) {
       return authModal.onOpen();
     }
-    //TODO check subscription
+
     return uploadModal.onOpen();
   };
   return (

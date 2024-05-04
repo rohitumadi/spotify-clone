@@ -33,7 +33,6 @@ export default function LikedContent({ songs }: LikedContentProps) {
       {songs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
-            {/* TODO play song on click */}
             <MediaItem song={song} onClick={(id: string) => onPlay(id)} />
           </div>
           <LikeButton songId={song.id} />
