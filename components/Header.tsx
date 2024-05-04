@@ -11,6 +11,7 @@ import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 import Button from "./Button";
+import usePlayer from "@/hooks/usePlayer";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -19,14 +20,14 @@ interface HeaderProps {
 
 export default function Header({ children, className }: HeaderProps) {
   const router = useRouter();
-
+  const player = usePlayer();
   const authModal = useAuthModal();
   const supabaseClient = useSupabaseClient();
   const { user } = useUser();
   async function handleLogout() {
     // Handle logout
     const { error } = await supabaseClient.auth.signOut();
-    //TODO reset any playing song
+    player.reset();
     router.refresh();
 
     if (error) {

@@ -5,7 +5,7 @@ interface SliderProps {
   value?: number;
   onChange?: (value: number) => void;
 }
-
+//this component can be used for custom volume slider
 export default function Slider({ value = 1, onChange }: SliderProps) {
   const handleChange = (value: number[]) => {
     onChange?.(value[0]);
