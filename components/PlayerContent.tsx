@@ -82,6 +82,7 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
             }}
             showSkipControls={true}
             autoPlay
+            onEnded={onPlayNext}
             customVolumeControls={[]}
             showJumpControls={false}
             onClickNext={onPlayNext}
@@ -106,6 +107,7 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
             }}
             showSkipControls={true}
             autoPlay
+            onEnded={onPlayNext}
             showJumpControls={false}
             onClickNext={onPlayNext}
             onClickPrevious={onPlayPrevious}
