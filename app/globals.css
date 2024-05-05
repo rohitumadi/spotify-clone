@@ -12,3 +12,6 @@ body,
 .rhap_time {
   color: white !important;
 }
+.rhap_skip-button:hover {
+  color: white !important;
+}

@@ -14,6 +14,9 @@ const font = Figtree({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Spotify Clone",
   description: "Listen to music!",
+  icons: {
+    icon: "/images/logo.png",
+  },
 };
 
 export const revalidate = 0;
