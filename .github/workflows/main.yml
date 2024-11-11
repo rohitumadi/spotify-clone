@@ -2,7 +2,7 @@ name: Ping Supabase to Prevent Pausing
 
 on:
   schedule:
-    - cron: '0 9 * * 1,4' # Runs at 9:00 AM every Monday and Thursday
+    - cron: '0 10 * * 1,4' # Runs at 9:00 AM every Monday and Thursday
 
 jobs:
   ping:
@@ -26,6 +26,6 @@ jobs:
         run: |
           node -e "
           const { createClient } = require('@supabase/supabase-js');
-          const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+          const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
           supabase.from('users').select('id').limit(1).then(console.log).catch(console.error);
           "
