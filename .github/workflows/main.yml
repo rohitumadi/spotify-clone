@@ -2,7 +2,7 @@ name: Supabase Keep Alive
 
 on:
   schedule:
-    - cron: "0 0 * * 1" # once per week
+    - cron: "0 0 * * 1,4"  
   workflow_dispatch:   # 👈 enables manual runs
 
 jobs:
