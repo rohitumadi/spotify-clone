@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Authentication setup
+
+The app sends users back to `/auth/callback` after GitHub OAuth and email confirmation. In Supabase **Authentication → URL Configuration**, add the deployed URL (and `http://localhost:3000` for local development) to the Site URL / Redirect URLs allow list. Enable GitHub in **Authentication → Providers** and register the callback URL shown there (normally `https://<project-ref>.supabase.co/auth/v1/callback`) in the GitHub OAuth app.
+
+To use the guest button, enable **Anonymous Sign-Ins** in **Authentication → Providers**. Anonymous users are authenticated users in Supabase, so review RLS policies before enabling it. For production, configure a custom SMTP provider in **Authentication → SMTP Settings** so signup confirmations reliably reach users; Supabase's default email service is rate-limited.
+
 ## Getting Started
 
 First, run the development server:

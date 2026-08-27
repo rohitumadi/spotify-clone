@@ -24,6 +24,7 @@ export default function Header({ children, className }: HeaderProps) {
   const authModal = useAuthModal();
   const supabaseClient = useSupabaseClient();
   const { user } = useUser();
+  const isGuest = Boolean((user as { is_anonymous?: boolean } | null)?.is_anonymous);
   async function handleLogout() {
     // Handle logout
     const { error } = await supabaseClient.auth.signOut();
@@ -75,6 +76,7 @@ export default function Header({ children, className }: HeaderProps) {
               className="flex gap-x-4 
             items-center"
             >
+              {isGuest && <span className="text-sm text-neutral-300">Guest</span>}
               <Button onClick={handleLogout} className="bg-white px-6 py-2">
                 Logout
               </Button>
